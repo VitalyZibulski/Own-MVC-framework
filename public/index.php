@@ -7,11 +7,24 @@
  * Routing
  */
 //Require the controller class
-require '../App/Controllers/Posts.php';
-//Require routing
-require '../Core/Router.php';
+//require '../App/Controllers/Posts.php';
 
-$router = new Router();
+/**
+ * Autoloader
+ */
+
+spl_autoload_register(function ($class){
+	$root = dirname(__DIR__); //get the parent directory
+	$file = $root . '/' .str_replace('\\', '/', $class) . 'php';
+	if(is_readable($file)){
+		require $root . '/' .str_replace('\\', '/', $class) . '.php';
+	}
+});
+
+//Require routing
+//require '../Core/Router.php';
+
+$router = new Core\Router();
 
 //echo get_class($router);
 
