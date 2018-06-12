@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class Posts
+class Posts extends \Core\Controller
 {
 	public function index()
 	{
@@ -13,4 +13,10 @@ class Posts
 	{
 		echo 'add posts';
 	}
+
+	public function edit()
+	{
+		echo 'edit post';
+	}
+
 }
