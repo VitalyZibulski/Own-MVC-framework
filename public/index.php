@@ -28,5 +28,5 @@ $url = $_SERVER['QUERY_STRING'];
 if($router->match($url)){
 	var_dump($router->getParams());
 } else {
-	echo 'No route found for URL '.$url.';
+	echo 'No route found for URL '.$url.'';
 }
