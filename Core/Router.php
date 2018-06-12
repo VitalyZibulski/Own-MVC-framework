@@ -28,13 +28,26 @@ class Router
 	 *
 	 * @return void
 	 */
-	public function add($route, $params)
+	public function add($route, $params = [])
 	{
+		//Convert the route to reg_exp, escape forward slashes
+		$route = preg_replace('/\//','\\/',$route);
+
+		//Convert variebles e.g. {controller}
+		$route = preg_replace('/\{([a-z]+)\}/','(?P<\1>[a-z-]+)', $route);
+
+		//Convert variebles with custom reg_exp {id:\d+}
+		$route = preg_replace('/\{([a-z]+):([^\}]+)\}/','(?P<\1>\2)', $route);
+
+		//Add start and end delimiters
+		$route = '/^'. $route . '$/i';
+
 		$this->routes[$route] = $params;
 	}
 
+
 	/**
-	 * Get all the routes from the rounting
+	 * Get all the routes from the routing
 	 *
 	 * @return array
 	 */
@@ -59,20 +72,24 @@ class Router
 		//Match to the fixed URL format /controller/action
 		$reg_exp = "/^(?P<controller>[a-z-]+)\/(?P<action>[a-z-]+)$/";
 
-		if (preg_match($reg_exp, $url, $matches)) {
-			//Get named capture group values
-			$params = [];
+		foreach ($this->routes as $route => $params){
+				if (preg_match($route, $url, $matches)) {
+					//Get named capture group values
+					$params = [];
 
-			foreach ($matches as $key => $match) {
-				if (is_string($key)) {
-					$params[$key] = $match;
+					foreach ($matches as $key => $match) {
+						if (is_string($key)) {
+							$params[$key] = $match;
+						}
+					}
+
+					$this->params = $params;
+					return true;
 				}
-			}
-
-			$this->params = $params;
-			return true;
 		}
+		return true;
 	}
+
 
 	/**
 	 * @return array
