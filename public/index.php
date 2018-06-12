@@ -6,7 +6,9 @@
 /**
  * Routing
  */
-
+//Require the controller class
+require '../App/Controllers/Posts.php';
+//Require routing
 require '../Core/Router.php';
 
 $router = new Router();
@@ -23,13 +25,15 @@ $router->add('{controller}/{id:\d+}/{action}');
 
 
 //Display the routing
-var_dump($router->getRoutes());
+//var_dump($router->getRoutes());
 
 //Match the requested route
 $url = $_SERVER['QUERY_STRING'];
 
 if($router->match($url)){
-	var_dump($router->getParams());
+	//var_dump($router->getParams());
 } else {
 	echo 'No route found for URL '.$url.'';
 }
+
+$router->dispatch($_SERVER['QUERY_STRING']);
